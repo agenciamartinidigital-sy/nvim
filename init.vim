@@ -1,17 +1,33 @@
 call plug#begin()
+" Interface
 Plug 'sainnhe/sonokai'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvimdev/dashboard-nvim'
+
+" Navegação
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Produtividade
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
 Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
-Plug 'neoclide/coc.nvim' , { 'branch' : 'release' }
+
+" Inteligência
+Plug 'neoclide/coc.nvim', { 'branch' : 'release' }
 Plug 'davidhalter/jedi-vim'
 Plug 'honza/vim-snippets'
-Plug 'jiangmiao/auto-pairs'
+
+" Utilitários
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+
 
 if (has("nvim"))
     Plug 'nvim-lua/plenary.nvim'
@@ -19,6 +35,36 @@ if (has("nvim"))
 endif
 
 call plug#end()
+
+" Configuração do dashboard-nvim com arte ASCII MARTINI
+lua << EOF
+require('dashboard').setup {
+  theme = 'hyper',
+  config = {
+    header = {
+      '',
+      '███╗   ███╗ █████╗ ██████╗ ████████╗██╗███╗   ██╗██╗',
+      '████╗ ████║██╔══██╗██╔══██╗╚══██╔══╝██║████╗  ██║██║',
+      '██╔████╔██║███████║██████╔╝   ██║   ██║██╔██╗ ██║██║',
+      '██║╚██╔╝██║██╔══██║██╔══██╗   ██║   ██║██║╚██╗██║██║',
+      '██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ██║██║ ╚████║██║',
+      '╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚═╝',
+      '',
+    },
+    shortcut = {
+      { desc = ' Novo Arquivo', group = '@property', action = 'enew', key = 'n' },
+      { desc = ' Buscar Arquivo', group = 'Label', action = 'Telescope find_files', key = 'f' },
+      { desc = ' Recentes', group = 'Label', action = 'Telescope oldfiles', key = 'r' },
+      { desc = ' Configuração', group = 'Label', action = 'edit ~/.config/nvim/init.vim', key = 'c' },
+      { desc = ' Sair', group = 'Label', action = 'qa', key = 'q' },
+    },
+    packages = { enable = false },
+    project = { enable = false },
+    mru = { limit = 5 },
+  }
+}
+EOF
+
 
 
 " Global Sets """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -73,13 +119,50 @@ endif
 
 let g:airline_theme = 'sonokai'
 
+" Comentar linhas """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --- Comentário rápido sem leader ---
+" Comentar linha atual com Ctrl-c
+nnoremap <C-c> I# <Esc>
+
+" Descomentar linha atual com Ctrl-u
+nnoremap <C-u> ^xx
+
+" Comentar seleção visual com Ctrl-c
+vnoremap <C-c> :s/^/# /<CR>:noh<CR>
+
+" Descomentar seleção visual com Ctrl-u
+vnoremap <C-u> :s/^# //<CR>:noh<CR>
+
+
 " Remaps """"""""""
 " Shortcuts for split navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+" Navegadores """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Firefox
+nnoremap <leader>ff :!firefox %<CR><CR>
+
+" Google Chrome
+nnoremap <leader>gc :!google-chrome %<CR><CR>
+
+" Chromium
+nnoremap <leader>ch :!chromium %<CR><CR>
+
+" Brave
+nnoremap <leader>br :!brave-browser %<CR><CR>
+
+" Microsoft Edge (Linux)
+nnoremap <leader>ed :!microsoft-edge %<CR><CR>
+
+" Safari (macOS)
+nnoremap <leader>sf :!open -a Safari %<CR><CR>
+
 nnoremap tp :!python %<cr>
+nnoremap tp :!js %<cr>
+
 
 
 
@@ -130,6 +213,12 @@ if (has("nvim"))
     nnoremap <leader>fg <cmd>Telescope live_grep<cr>
     nnoremap <leader>fb <cmd>Telescope buffers<cr>
     nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+    " Tab para ir para o próximo buffer
+    nnoremap <Tab> :bnext<CR>
+
+    " Shift+Tab para ir para o buffer anterior
+    nnoremap <S-Tab> :bprevious<CR>
+
 endif
 
 " Adding an empty line below, above and below with insert """""""""""""""""""""""""""""
@@ -156,6 +245,14 @@ nmap tt :q<CR>
 
 " Call command shortcut
 nmap tc :!
+
+" Cria um novo arquivo pedindo o nome
+nnoremap <leader>n :enew<CR>:file 
+
+" deletar um arquivo
+nnoremap <leader>d :!rm %<CR>
+
+
 
 
 "COC """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -405,6 +502,7 @@ let g:coc_explorer_global_presets = {
 \   },
 \ }
 
+
 " Use preset argument to open it
 nnoremap <space>ed :CocCommand explorer --preset .vim<CR>
 nnoremap <space>ef :CocCommand explorer --preset floating<CR>
@@ -413,4 +511,5 @@ nnoremap <space>eb :CocCommand explorer --preset buffer<CR>
 
 " List all presets
 nnoremap <space>el :CocList explPresets
+
 
