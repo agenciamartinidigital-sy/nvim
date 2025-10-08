@@ -1,0 +1,38 @@
+{
+  "languageserver": {
+    "html": {
+      "command": "vscode-html-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["html"]
+    },
+    "css": {
+      "command": "vscode-css-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["css", "scss", "less"]
+    },
+    "javascript": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+    },
+    "python": {
+      "command": "pyright-langserver",
+      "args": ["--stdio"],
+      "filetypes": ["python"]
+    }
+  },
+
+  "explorer.width": 30,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.previewAction.onHover": false,
+  "explorer.keyMappings.global": {
+    "<cr>": ["expandable?", "expand", "open"],
+    "v": "open:vsplit",
+    "h": "open:split"
+  },
+  "explorer.git.enable": true
+}
+
+
+
+
