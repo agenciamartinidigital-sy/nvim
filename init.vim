@@ -6,6 +6,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvimdev/dashboard-nvim'
+Plug 'nvim-tree/nvim-web-devicons' " opcional, para ícones bonitos
+
+
 
 " Navegação
 Plug 'preservim/nerdtree'
@@ -511,5 +514,4 @@ nnoremap <space>eb :CocCommand explorer --preset buffer<CR>
 
 " List all presets
 nnoremap <space>el :CocList explPresets
-
 
