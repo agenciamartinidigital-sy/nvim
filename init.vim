@@ -4,10 +4,8 @@ Plug 'sainnhe/sonokai'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
-Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvimdev/dashboard-nvim'
 Plug 'nvim-tree/nvim-web-devicons' " opcional, para ícones bonitos
-
 
 
 " Navegação
@@ -30,6 +28,17 @@ Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
+" Comando personalizado para apagar o arquivo atual
+command! DeleteFile call DeleteCurrentFile()
+
+function! DeleteCurrentFile()
+  let file = expand('%:p')
+  if confirm("Apagar o arquivo '" . file . "'?", "&Sim\n&Não") == 1
+    call delete(file)
+    bdelete!
+    echo "Arquivo apagado: " . file
+  endif
+endfunction
 
 
 if (has("nvim"))
@@ -84,7 +93,7 @@ set incsearch        " Incremental search
 set ignorecase       " Ingore case in search
 set smartcase        " Consider case if there is a upper case character
 set scrolloff=8      " Minimum number of lines to keep above and below the cursor
-set colorcolumn=100  " Draws a line at the given line to keep aware of the line size
+set colorcolumn=150  " Draws a line at the given line to keep aware of the line size
 set signcolumn=yes   " Add a column on the left. Useful for linting
 set cmdheight=4      " Give more space for displaying messages
 set updatetime=100   " Time in miliseconds to consider the changes
@@ -95,10 +104,25 @@ set splitright       " Create the vertical splits to the right
 set splitbelow       " Create the horizontal splits below
 set autoread         " Update vim after file update from outside
 set mouse=a          " Enable mouse support
+set tabstop=4       " Cada TAB equivale a 4 espaços
+set shiftwidth=4    " Indentação automática usa 4 espaços
+set expandtab       " Converte TAB em espaços
 filetype on          " Detect and set the filetype option and trigger the FileType Event
 filetype plugin on   " Load the plugin file for the file type, if any
 filetype indent on   " Load the indent file for the file type, if any
-
+set shell=C:/Program\ Files/Git/usr/bin/bash.exe
+set shellcmdflag=-c
+set shellquote=
+set shellxquote=
+" =========================
+" Configuração de Shell (Windows)
+" =========================
+if has('win32') || has('win64')
+  set shell=powershell
+  set shellcmdflag=-c
+  set shellquote=\"
+  set shellxquote=
+endif
 
 
 " Themes """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -136,6 +160,10 @@ vnoremap <C-c> :s/^/# /<CR>:noh<CR>
 " Descomentar seleção visual com Ctrl-u
 vnoremap <C-u> :s/^# //<CR>:noh<CR>
 
+" Apagar arquivo
+nnoremap <leader>d :DeleteFile<CR>
+
+
 
 " Remaps """"""""""
 " Shortcuts for split navigation
@@ -145,26 +173,24 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 " Navegadores """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Firefox
-nnoremap <leader>ff :!firefox %<CR><CR>
+" =========================
+" Comandos para abrir navegadores
+" =========================
+" Abre o arquivo atual no Chrome
+command! Chrome execute '!start chrome "' . expand('%:p') . '"'
 
-" Google Chrome
-nnoremap <leader>gc :!google-chrome %<CR><CR>
+" Abre o arquivo atual no Firefox
+command! Firefox execute '!start firefox "' . expand('%:p') . '"'
 
-" Chromium
-nnoremap <leader>ch :!chromium %<CR><CR>
+" Abre o arquivo atual no Edge
+command! Edge execute '!start msedge "' . expand('%:p') . '"'
 
-" Brave
-nnoremap <leader>br :!brave-browser %<CR><CR>
+" Abre o arquivo atual no Brave
+command! Brave execute '!start brave "' . expand('%:p') . '"'
 
-" Microsoft Edge (Linux)
-nnoremap <leader>ed :!microsoft-edge %<CR><CR>
+" Abre o arquivo atual no Chromium
+command! Chromium execute '!start chromium "' . expand('%:p') . '"'
 
-" Safari (macOS)
-nnoremap <leader>sf :!open -a Safari %<CR><CR>
-
-nnoremap tp :!python %<cr>
-nnoremap tp :!js %<cr>
 
 
 
