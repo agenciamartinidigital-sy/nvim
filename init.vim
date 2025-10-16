@@ -1,17 +1,21 @@
-call plug#begin()
+call plug#begin('~/.vim/plugged')
+
 " Interface
 Plug 'sainnhe/sonokai'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvimdev/dashboard-nvim'
-Plug 'nvim-tree/nvim-web-devicons' " opcional, para ícones bonitos
+Plug 'nvim-tree/nvim-web-devicons'
 
+" Debug
+Plug 'puremourning/vimspector'
 
 " Navegação
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Produtividade
 Plug 'tpope/vim-commentary'
@@ -28,9 +32,10 @@ Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
+call plug#end()
+
 " Comando personalizado para apagar o arquivo atual
 command! DeleteFile call DeleteCurrentFile()
-
 function! DeleteCurrentFile()
   let file = expand('%:p')
   if confirm("Apagar o arquivo '" . file . "'?", "&Sim\n&Não") == 1
@@ -40,13 +45,16 @@ function! DeleteCurrentFile()
   endif
 endfunction
 
+" Atalhos para debug
+nmap <F5> :call vimspector#Launch()<CR>
+nmap <F9> :call vimspector#ToggleBreakpoint()<CR>
+nmap <F10> :call vimspector#StepOver()<CR>
+nmap <F11> :call vimspector#StepInto()<CR>
+nmap <F12> :call vimspector#StepOut()<CR>
 
-if (has("nvim"))
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim'
-endif
+" Provider de Python
+let g:python3_host_prog = 'C:/Users/Luiís Martini/AppData/Local/Programs/Python/Python314/python.exe'
 
-call plug#end()
 
 " Configuração do dashboard-nvim com arte ASCII MARTINI
 lua << EOF
@@ -145,6 +153,9 @@ if (has("nvim")) "Transparent background. Only for nvim
 endif
 
 let g:airline_theme = 'sonokai'
+let g:python3_host_prog = 'C:/Users/Luis/AppData/Local/Programs/Python/Python314/python.exe'
+
+
 
 " Comentar linhas """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --- Comentário rápido sem leader ---
@@ -208,6 +219,7 @@ autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
 
 
 
+
 " AirLine """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -215,6 +227,14 @@ let g:airline_powerline_fonts = 1
 
 " NerdTree """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <C-a> :NERDTreeToggle<CR>
+
+"Debug
+nmap <F5> :call vimspector#Launch()<CR>
+nmap <F9> :call vimspector#ToggleBreakpoint()<CR>
+nmap <F10> :call vimspector#StepOver()<CR>
+nmap <F11> :call vimspector#StepInto()<CR>
+nmap <F12> :call vimspector#StepOut()<CR>
+
 
 
 
@@ -281,6 +301,12 @@ nnoremap <leader>n :enew<CR>:file
 " deletar um arquivo
 nnoremap <leader>d :!rm %<CR>
 
+
+nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
+nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
+nnoremap <silent> <F11> :lua require'dap'.step_into()<CR>
+nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
+nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
 
 
 
