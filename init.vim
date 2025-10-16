@@ -1,4 +1,7 @@
-call plug#begin('~/.vim/plugged')
+" =========================
+" Plugins
+" =========================
+call plug#begin()
 
 " Interface
 Plug 'sainnhe/sonokai'
@@ -8,14 +11,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'nvimdev/dashboard-nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 
-" Debug
-Plug 'puremourning/vimspector'
-
 " Navegação
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Produtividade
 Plug 'tpope/vim-commentary'
@@ -24,7 +23,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
 
 " Inteligência
-Plug 'neoclide/coc.nvim', { 'branch' : 'release' }
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'davidhalter/jedi-vim'
 Plug 'honza/vim-snippets'
 
@@ -32,28 +31,12 @@ Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
+" Debug Adapter Protocol
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'mfussenegger/nvim-dap-python'
+
 call plug#end()
-
-" Comando personalizado para apagar o arquivo atual
-command! DeleteFile call DeleteCurrentFile()
-function! DeleteCurrentFile()
-  let file = expand('%:p')
-  if confirm("Apagar o arquivo '" . file . "'?", "&Sim\n&Não") == 1
-    call delete(file)
-    bdelete!
-    echo "Arquivo apagado: " . file
-  endif
-endfunction
-
-" Atalhos para debug
-nmap <F5> :call vimspector#Launch()<CR>
-nmap <F9> :call vimspector#ToggleBreakpoint()<CR>
-nmap <F10> :call vimspector#StepOver()<CR>
-nmap <F11> :call vimspector#StepInto()<CR>
-nmap <F12> :call vimspector#StepOut()<CR>
-
-" Provider de Python
-let g:python3_host_prog = 'C:/Users/Luiís Martini/AppData/Local/Programs/Python/Python314/python.exe'
 
 
 " Configuração do dashboard-nvim com arte ASCII MARTINI
@@ -84,47 +67,37 @@ require('dashboard').setup {
   }
 }
 EOF
-
-
-
-" Global Sets """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-syntax on            " Enable syntax highlight
-set nu               " Enable line numbers
-set tabstop=4        " Show existing tab with 4 spaces width
-set softtabstop=4    " Show existing tab with 4 spaces width
-set shiftwidth=4     " When indenting with '>', use 4 spaces width
-set expandtab        " On pressing tab, insert 4 spaces
-set smarttab         " insert tabs on the start of a line according to shiftwidth
-set smartindent      " Automatically inserts one extra level of indentation in some cases
-set hidden           " Hides the current buffer when a new file is openned
-set incsearch        " Incremental search
-set ignorecase       " Ingore case in search
-set smartcase        " Consider case if there is a upper case character
-set scrolloff=8      " Minimum number of lines to keep above and below the cursor
-set colorcolumn=150  " Draws a line at the given line to keep aware of the line size
-set signcolumn=yes   " Add a column on the left. Useful for linting
-set cmdheight=4      " Give more space for displaying messages
-set updatetime=100   " Time in miliseconds to consider the changes
-set encoding=utf-8   " The encoding should be utf-8 to activate the font icons
-set nobackup         " No backup files
-set nowritebackup    " No backup files
-set splitright       " Create the vertical splits to the right
-set splitbelow       " Create the horizontal splits below
-set autoread         " Update vim after file update from outside
-set mouse=a          " Enable mouse support
-set tabstop=4       " Cada TAB equivale a 4 espaços
-set shiftwidth=4    " Indentação automática usa 4 espaços
-set expandtab       " Converte TAB em espaços
-filetype on          " Detect and set the filetype option and trigger the FileType Event
-filetype plugin on   " Load the plugin file for the file type, if any
-filetype indent on   " Load the indent file for the file type, if any
-set shell=C:/Program\ Files/Git/usr/bin/bash.exe
-set shellcmdflag=-c
-set shellquote=
-set shellxquote=
 " =========================
-" Configuração de Shell (Windows)
+" Configurações globais
 " =========================
+syntax on
+set number
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set smartindent
+set hidden
+set incsearch
+set ignorecase
+set smartcase
+set scrolloff=8
+set colorcolumn=150
+set signcolumn=yes
+set cmdheight=2
+set updatetime=300
+set encoding=utf-8
+set nobackup
+set nowritebackup
+set splitright
+set splitbelow
+set autoread
+set mouse=a
+
+filetype plugin indent on
+
+" Configuração de shell para Windows
 if has('win32') || has('win64')
   set shell=powershell
   set shellcmdflag=-c
@@ -132,181 +105,88 @@ if has('win32') || has('win64')
   set shellxquote=
 endif
 
-
-" Themes """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" =========================
+" Tema
+" =========================
 if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
 
 let g:sonokai_style = 'andromeda'
 let g:sonokai_enable_italic = 1
-let g:sonokai_disable_italic_comment = 0
-let g:sonokai_diagnostic_line_highlight = 1
-let g:sonokai_current_word = 'bold'
 colorscheme sonokai
 
-if (has("nvim")) "Transparent background. Only for nvim
-    highlight Normal guibg=NONE ctermbg=NONE
-    highlight EndOfBuffer guibg=NONE ctermbg=NONE
-endif
+highlight Normal guibg=NONE ctermbg=NONE
+highlight EndOfBuffer guibg=NONE ctermbg=NONE
 
 let g:airline_theme = 'sonokai'
-let g:python3_host_prog = 'C:/Users/Luis/AppData/Local/Programs/Python/Python314/python.exe'
-
-
-
-" Comentar linhas """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --- Comentário rápido sem leader ---
-" Comentar linha atual com Ctrl-c
-nnoremap <C-c> I# <Esc>
-
-" Descomentar linha atual com Ctrl-u
-nnoremap <C-u> ^xx
-
-" Comentar seleção visual com Ctrl-c
-vnoremap <C-c> :s/^/# /<CR>:noh<CR>
-
-" Descomentar seleção visual com Ctrl-u
-vnoremap <C-u> :s/^# //<CR>:noh<CR>
-
-" Apagar arquivo
-nnoremap <leader>d :DeleteFile<CR>
-
-
-
-" Remaps """"""""""
-" Shortcuts for split navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-" Navegadores """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" =========================
-" Comandos para abrir navegadores
-" =========================
-" Abre o arquivo atual no Chrome
-command! Chrome execute '!start chrome "' . expand('%:p') . '"'
-
-" Abre o arquivo atual no Firefox
-command! Firefox execute '!start firefox "' . expand('%:p') . '"'
-
-" Abre o arquivo atual no Edge
-command! Edge execute '!start msedge "' . expand('%:p') . '"'
-
-" Abre o arquivo atual no Brave
-command! Brave execute '!start brave "' . expand('%:p') . '"'
-
-" Abre o arquivo atual no Chromium
-command! Chromium execute '!start chromium "' . expand('%:p') . '"'
-
-
-
-
-
-" autocmd """"""""""
-function! HighlightWordUnderCursor()
-    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
-        exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
-    else
-        match none
-    endif
-endfunction
-
-autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
-
-
-
-
-" AirLine """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+" =========================
+" NERDTree
+" =========================
+nnoremap <C-a> :NERDTreeToggle<CR>
 
-" NerdTree """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <C-a> :NERDTreeToggle<CR>
-
-"Debug
-nmap <F5> :call vimspector#Launch()<CR>
-nmap <F9> :call vimspector#ToggleBreakpoint()<CR>
-nmap <F10> :call vimspector#StepOver()<CR>
-nmap <F11> :call vimspector#StepInto()<CR>
-nmap <F12> :call vimspector#StepOut()<CR>
-
-
-
-
-
-" ALE """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_linters = {
-\   'python': ['flake8', 'pyright', 'bandit'],
-\}
-
-let g:ale_fixers = {
-\   '*': ['trim_whitespace'],
-\   'python': ['black', 'isort'],
-\}
-
+" =========================
+" ALE
+" =========================
+let g:ale_linters = { 'python': ['flake8', 'pyright', 'bandit'] }
+let g:ale_fixers = { '*': ['trim_whitespace'], 'python': ['black', 'isort'] }
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options = '--line-length 100'
 let g:ale_python_isort_options = '--profile black -l 100'
 
+" =========================
+" Telescope
+" =========================
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" NeoVim """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if (has("nvim"))
+" =========================
+" Funções utilitárias
+" =========================
+command! DeleteFile call DeleteCurrentFile()
+function! DeleteCurrentFile()
+  let file = expand('%:p')
+  if confirm("Apagar o arquivo '" . file . "'?", "&Sim\n&Não") == 1
+    call delete(file)
+    bdelete!
+    echo "Arquivo apagado: " . file
+  endif
+endfunction
 
-    " Telescope """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    nnoremap <leader>ff <cmd>Telescope find_files<cr>
-    nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-    nnoremap <leader>fb <cmd>Telescope buffers<cr>
-    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-    " Tab para ir para o próximo buffer
-    nnoremap <Tab> :bnext<CR>
-
-    " Shift+Tab para ir para o buffer anterior
-    nnoremap <S-Tab> :bprevious<CR>
-
-endif
-
-" Adding an empty line below, above and below with insert """""""""""""""""""""""""""""
-nmap op o<Esc>k
-nmap oi O<Esc>j
-nmap oo A<CR>
-
-" Create a tab
-nmap te :tabe<CR>
-
-" Navigate between buffers
-nmap ty :bn<CR>
-nmap tr :bp<CR>
-
-" Delete a buffer
-nmap td :bd<CR>
-
-" Create splits 
-nmap th :split<CR>
-nmap tv :vsplit<CR>
-
-" Close splits and others
-nmap tt :q<CR>
-
-" Call command shortcut
-nmap tc :!
-
-" Cria um novo arquivo pedindo o nome
-nnoremap <leader>n :enew<CR>:file 
-
-" deletar um arquivo
-nnoremap <leader>d :!rm %<CR>
+" =========================
+" Autocommands
+" =========================
+augroup HighlightWord
+  autocmd!
+  autocmd CursorHold,CursorHoldI * call matchadd('Search', '\V\<'.expand('<cword>').'\>')
+augroup END
 
 
-nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
-nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
-nnoremap <silent> <F11> :lua require'dap'.step_into()<CR>
-nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
-nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
+"==============================
+" Debug 
+"==============================
+" Iniciar/continuar debug
+nnoremap <F5> :lua require'dap'.continue()<CR>
+" Step over
+nnoremap <F10> :lua require'dap'.step_over()<CR>
+" Step into
+nnoremap <F11> :lua require'dap'.step_into()<CR>
+" Step out
+nnoremap <F12> :lua require'dap'.step_out()<CR>
+" Toggle breakpoint
+nnoremap <leader>b :lua require'dap'.toggle_breakpoint()<CR>
+" Breakpoint condicional
+nnoremap <leader>B :lua require'dap'.set_breakpoint(vim.fn.input('Cond: '))<CR>
+" Avaliar expressão
+nnoremap <leader>dr :lua require'dap'.repl.open()<CR>
+nnoremap <leader>dl :lua require'dap'.run_last()<CR>
+
+
 
 
 
@@ -566,4 +446,3 @@ nnoremap <space>eb :CocCommand explorer --preset buffer<CR>
 
 " List all presets
 nnoremap <space>el :CocList explPresets
-
