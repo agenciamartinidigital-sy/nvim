@@ -1,0 +1,34 @@
+{
+  "configurations": {
+    "Python: Arquivo atual": {
+      "adapter": "debugpy",
+      "configuration": {
+        "request": "launch",
+        "program": "${file}",
+        "python": "python3",
+        "cwd": "${workspaceRoot}"
+      }
+    },
+
+    "Node: Arquivo atual": {
+      "adapter": "vscode-node",
+      "configuration": {
+        "request": "launch",
+        "program": "${file}",
+        "cwd": "${workspaceRoot}",
+        "runtimeExecutable": "node"
+      }
+    },
+
+    "Node: Anexar a processo": {
+      "adapter": "vscode-node",
+      "configuration": {
+        "request": "attach",
+        "port": 9229,
+        "address": "localhost",
+        "restart": true,
+        "cwd": "${workspaceRoot}"
+      }
+    }
+  }
+}
